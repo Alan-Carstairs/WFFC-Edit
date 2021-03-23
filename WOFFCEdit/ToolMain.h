@@ -35,7 +35,7 @@ private:	//methods
 	void	onContentAdded();
 
 
-		
+
 private:	//variables
 	HWND	m_toolHandle;		//Handle to the  window
 	Game	m_d3dRenderer;		//Instance of D3D rendering system for our tool
@@ -47,7 +47,7 @@ private:	//variables
 	int m_width;		//dimensions passed to directX
 	int m_height;
 	int m_currentChunk;			//the current chunk of thedatabase that we are operating on.  Dictates loading and saving. 
-	
 
-	
+
+
 };
