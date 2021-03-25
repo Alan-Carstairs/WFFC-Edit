@@ -292,7 +292,10 @@ void ToolMain::Tick(MSG *msg)
 		//update Scenegraph
 		//add to scenegraph
 		//resend scenegraph to Direct X renderer
-
+	if (m_toolInputCommands.mouse_LB_Down)
+	{
+		m_d3dRenderer.SculptTerrain();
+	}
 	//Renderer Update Call
 	m_d3dRenderer.Tick(&m_toolInputCommands);
 }
@@ -320,7 +323,12 @@ void ToolMain::UpdateInput(MSG * msg)
 
 	case WM_LBUTTONDOWN:
 		//mouse left pressed.	
-		m_toolInputCommands.mouse_LB_Down = true;
+		m_toolInputCommands.mouse_LB_Down = true;		
+		break;
+	case WM_LBUTTONUP:
+		//mouse left pressed.	
+		
+		m_toolInputCommands.mouse_LB_Down = false;
 		break;
 	case WM_RBUTTONDOWN:
 		//mouse left pressed.	
@@ -336,7 +344,7 @@ void ToolMain::UpdateInput(MSG * msg)
 	if (m_toolInputCommands.mouse_LB_Down)
 	{
 		m_selectedObject = m_d3dRenderer.MousePicking();
-		m_toolInputCommands.mouse_LB_Down = false;
+		//m_toolInputCommands.mouse_LB_Down = false;
 	}
 
 	//WASD movement

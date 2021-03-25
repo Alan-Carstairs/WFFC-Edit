@@ -1,7 +1,7 @@
 #include <string>
 #include "DisplayChunk.h"
 #include "Game.h"
-
+#include <cmath>
 
 using namespace DirectX;
 using namespace DirectX::SimpleMath;
@@ -78,7 +78,26 @@ void DisplayChunk::InitialiseBatch()
 		}
 	}
 	CalculateTerrainNormals();
-	
+
+	//////////////////////////////////////////////////////////////////////////
+	// Store original terrain data
+	//////////////////////////////////////////////////////////////////////////
+	for (int i = 0; i < TERRAINRESOLUTION; i++)
+	{
+		for (int j = 0; j < TERRAINRESOLUTION; j++)
+		{
+			m_terrainGeometryOriginal[i][j] = m_terrainGeometry[i][j];
+		}
+	}
+
+	CalculateTerrainNormals();
+
+	XMFLOAT3 A = m_terrainGeometry[0][0].position;
+	XMFLOAT3 B = m_terrainGeometry[0][1].position;
+	A.y = 0;
+	B.y = 0;
+	XMVECTOR length = XMVector3Length(B - A);
+	m_RealRadius = length.m128_f32[0] * m_Radius;
 }
 
 void DisplayChunk::LoadHeightMap(std::shared_ptr<DX::DeviceResources>  DevResources)
@@ -146,6 +165,21 @@ void DisplayChunk::SaveHeightMap()
 		m_heightMap[i] = 0;
 	}*/
 
+	//for (int i = 0; i < TERRAINRESOLUTION; i++)
+	//{
+	//	for (int j = 0; j < TERRAINRESOLUTION; j++)
+	//	{
+	//		// Reverse height normalization when saving out
+	//		float height = m_terrainGeometry[i][j].position.y / m_terrainHeightScale;
+
+	//		if (height != 0)
+	//		{
+	//			int x = 3;
+	//		}
+	//		m_heightMap[i * TERRAINRESOLUTION + j] = height;
+	//	}
+	//}
+
 	FILE *pFile = NULL;
 
 	// Open The File In Read / Binary Mode.
@@ -183,6 +217,102 @@ void DisplayChunk::GenerateHeightmap()
 {
 	//insert how YOU want to update the heigtmap here! :D
 }
+
+
+std::vector<TriangleData> DisplayChunk::GetIntersectingTriangles(DirectX::SimpleMath::Ray _pickingRay)
+{
+	std::vector<TriangleData> intersectingTriangles;
+
+	std::pair<int, int> ij0;
+	std::pair<int, int> ij1;
+	std::pair<int, int> ij2;
+	std::pair<int, int> ij3;
+
+	for (int i = 0; i < TERRAINRESOLUTION - 2; i++)
+	{
+		for (int j = 0; j < TERRAINRESOLUTION - 2; j++)
+		{
+			ij0 = { i,     j };
+			ij1 = { i,     j + 1 };
+			ij2 = { i + 1, j };
+			ij3 = { i + 1, j + 1 };
+
+			auto v0 = TerrainVertexData(ij0.first, ij0.second, m_terrainGeometry[ij0.first][ij0.second].position);
+			auto v1 = TerrainVertexData(ij1.first, ij1.second, m_terrainGeometry[ij1.first][ij1.second].position);
+			auto v2 = TerrainVertexData(ij2.first, ij2.second, m_terrainGeometry[ij2.first][ij2.second].position);
+			auto v3 = TerrainVertexData(ij3.first, ij3.second, m_terrainGeometry[ij3.first][ij3.second].position);
+
+			/* Quad:
+				v0-----v1
+				| \    |
+				|  \   |
+				|   \  |
+				|    \ |
+				v2----v3
+			*/
+
+			float distance;
+
+			if (_pickingRay.Intersects(v0.position, v3.position, v1.position, distance))
+			{
+				intersectingTriangles.emplace_back(TriangleData(v0, v3, v1));
+				intersectingTriangles.back().distance = distance;
+			}
+
+			if (_pickingRay.Intersects(v0.position, v2.position, v3.position, distance))
+			{
+				intersectingTriangles.emplace_back(TriangleData(v0, v2, v3));
+				intersectingTriangles.back().distance = distance;
+			}
+		}
+	}
+
+	return intersectingTriangles;
+}
+
+void DisplayChunk::EditTerrain(TerrainVertexData _selectedVertex, bool _elevate)
+{
+	constexpr float adjustmentSpeed = 10;
+	const float radiusSquared = m_Radius * m_Radius;
+
+	const float deltaHeight = adjustmentSpeed;
+	const float targetHeight = _selectedVertex.position.y + deltaHeight;
+
+	int iMin = std::ceil(std::max(_selectedVertex.i - m_Radius, 0.0f));
+	int jMin = std::ceil(std::max(_selectedVertex.j - m_Radius, 0.0f));
+	int iMax = std::floor(std::min(_selectedVertex.i + m_Radius, TERRAINRESOLUTION - 1.0f));
+	int jMax = std::floor(std::min(_selectedVertex.j + m_Radius, TERRAINRESOLUTION - 1.0f));
+
+	for (int i = iMin; i <= iMax; i++)
+	{
+		for (int j = jMin; j <= jMax; j++)
+		{
+			// Check if within circle
+			float dx = std::abs(i - _selectedVertex.i);
+			float dy = std::abs(j - _selectedVertex.j);
+			float D = dx * dx + dy * dy;
+
+			if (D < radiusSquared)
+			{
+				float dist = sqrt(i * i + j * j);
+				float alpha = dist != 0 ? (m_Radius / dist) : 0;
+
+				if (_elevate)
+				{
+					m_terrainGeometry[i][j].position.y += deltaHeight * alpha;
+				}
+				else
+				{
+					m_terrainGeometry[i][j].position.y = std::max(m_terrainGeometry[i][j].position.y - deltaHeight * alpha, 0.0f);
+				}
+			}
+		}
+	}
+
+	CalculateTerrainNormals();
+
+}
+
 
 void DisplayChunk::CalculateTerrainNormals()
 {

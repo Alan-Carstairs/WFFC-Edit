@@ -51,6 +51,7 @@ public:
 	void BuildDisplayChunk(ChunkObject *SceneChunk);
 	void SaveDisplayChunk(ChunkObject *SceneChunk);	//saves geometry et al
 	void ClearDisplayList();
+	void SculptTerrain();
 
 	//picking
 	int MousePicking();
@@ -65,6 +66,8 @@ private:
 
 	void CreateDeviceDependentResources();
 	void CreateWindowSizeDependentResources();
+	void SelectTri();
+	Ray CastPickingRay();
 
 	void XM_CALLCONV DrawGrid(DirectX::FXMVECTOR xAxis, DirectX::FXMVECTOR yAxis, DirectX::FXMVECTOR origin, size_t xdivs, size_t ydivs, DirectX::GXMVECTOR color);
 
@@ -76,6 +79,8 @@ private:
 	FPSCamera*							m_Camera;
 	//functionality
 	float								m_movespeed;
+	Ray									m_pRaycast;
+	std::unique_ptr<TriangleData>		m_SelectedTriangle;
 
 	//Mouse
 	int mouse_X;
