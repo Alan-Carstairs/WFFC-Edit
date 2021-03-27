@@ -6,6 +6,8 @@
 #include "Game.h"
 #include "DisplayObject.h"
 #include <string>
+#include <algorithm>
+
 
 
 using namespace DirectX;
@@ -300,6 +302,8 @@ void Game::Render()
 
 		//Render the batch,  This is handled in the Display chunk becuase it has the potential to get complex
 	m_displayChunk.RenderBatch(m_deviceResources);
+
+	DrawUtility(context);
 
 	m_deviceResources->Present();
 }
@@ -620,6 +624,7 @@ void Game::SelectTri()
 
 
 	}
+	
 }
 int Game::MousePicking()
 {
@@ -662,6 +667,16 @@ int Game::MousePicking()
 			if (m_displayList[i].m_model.get()->meshes[y]->boundingBox.Intersects(nearPoint, pickingVector, pickedDistance))
 			{
 				selectedID = i;
+				if (std::find(m_selectedObjectVector.begin(), m_selectedObjectVector.end(),i)!= m_selectedObjectVector.end())
+				{
+					break;
+				}
+				else
+				{
+					m_selectedObjectVector.push_back(i);
+				}
+				
+				
 			}
 		}
 	}
@@ -695,12 +710,70 @@ void Game::SculptTerrain()
 {
 	bool change = true;
 
-	SelectTri();
+	//SelectTri();
 
 	if ( m_InputCommands.mouse_LB_Down &&  m_SelectedTriangle)
 	{
 		m_displayChunk.EditTerrain(m_SelectedTriangle->v0, change);
 	}
+	
+}
+
+void Game::DrawUtility(ID3D11DeviceContext * context)
+{
+	// SETUP
+	m_states = std::make_unique<CommonStates>(m_deviceResources->GetD3DDevice());
+	m_batch = std::make_unique<PrimitiveBatch<VertexPositionColor>>(context);
+
+	m_batchEffect = std::make_unique<BasicEffect>(m_deviceResources->GetD3DDevice());
+	m_batchEffect->SetVertexColorEnabled(true);
+	m_batchEffect->SetView(m_Camera->GetViewMatrix());
+	m_batchEffect->SetProjection(m_Camera->GetProjectionMatrix());
+
+	{
+		void const* shaderByteCode;
+		size_t byteCodeLength;
+
+		m_batchEffect->GetVertexShaderBytecode(&shaderByteCode, &byteCodeLength);
+		DX::ThrowIfFailed(
+			m_deviceResources->GetD3DDevice()->CreateInputLayout(
+				VertexPositionColor::InputElements, VertexPositionColor::InputElementCount,
+				shaderByteCode, byteCodeLength,
+				m_batchInputLayout.ReleaseAndGetAddressOf()
+			)
+		);
+	}
+
+	context->OMSetBlendState(m_states->Opaque(), nullptr, 0xFFFFFFFF);
+	context->OMSetDepthStencilState(m_states->DepthDefault(), 0);
+	context->RSSetState(m_states->CullNone());
+
+	m_batchEffect->Apply(context);
+	context->IASetInputLayout(m_batchInputLayout.Get());
+
+	m_batch->Begin();
+
+
+	//////////////////////////////////////////////////////////////////////////
+	// Terrain brush
+	//////////////////////////////////////////////////////////////////////////
+	if (m_SelectedTriangle)
+	{
+		BoundingSphere sphere = BoundingSphere(m_SelectedTriangle->v0.position, m_displayChunk.GetBrushRadius());
+		DrawUtility::Draw(m_batch.get(), sphere);
+
+		XMFLOAT3 offsetPosV0 = XMFLOAT3(m_SelectedTriangle->v0.position.x, m_SelectedTriangle->v0.position.y + 1, m_SelectedTriangle->v0.position.z);
+		XMFLOAT3 offsetPosV1 = XMFLOAT3(m_SelectedTriangle->v1.position.x, m_SelectedTriangle->v1.position.y + 1, m_SelectedTriangle->v1.position.z);
+		XMFLOAT3 offsetPosV2 = XMFLOAT3(m_SelectedTriangle->v2.position.x, m_SelectedTriangle->v2.position.y + 1, m_SelectedTriangle->v2.position.z);
+		XMVECTOR A = XMLoadFloat3(&offsetPosV0);
+		XMVECTOR B = XMLoadFloat3(&offsetPosV1);
+		XMVECTOR C = XMLoadFloat3(&offsetPosV2);
+
+		DrawUtility::DrawTriangle(m_batch.get(), A, B, C, Colors::Red);
+	}
+
+
+	m_batch->End();
 
 }
 

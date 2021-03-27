@@ -22,6 +22,7 @@ ToolMain::ToolMain()
 	m_toolInputCommands.mouse_X = 0;
 	m_toolInputCommands.mouse_Y = 0;
 	m_toolInputCommands.mouse_LB_Down = false;
+	SculptFunc = false;
 
 }
 
@@ -292,9 +293,14 @@ void ToolMain::Tick(MSG *msg)
 		//update Scenegraph
 		//add to scenegraph
 		//resend scenegraph to Direct X renderer
-	if (m_toolInputCommands.mouse_LB_Down)
+	if (SculptFunc)
 	{
-		m_d3dRenderer.SculptTerrain();
+		m_d3dRenderer.SelectTri();
+	
+		if (m_toolInputCommands.mouse_LB_Down)
+		{
+			m_d3dRenderer.SculptTerrain();
+		}
 	}
 	//Renderer Update Call
 	m_d3dRenderer.Tick(&m_toolInputCommands);
@@ -344,7 +350,8 @@ void ToolMain::UpdateInput(MSG * msg)
 	if (m_toolInputCommands.mouse_LB_Down)
 	{
 		m_selectedObject = m_d3dRenderer.MousePicking();
-		//m_toolInputCommands.mouse_LB_Down = false;
+		m_selectedObjectVector = m_d3dRenderer.getCurrentSelectionVectorID();
+		m_toolInputCommands.mouse_LB_Down = false;
 	}
 
 	//WASD movement
@@ -392,4 +399,12 @@ void ToolMain::UpdateInput(MSG * msg)
 	}
 	else m_toolInputCommands.rotUp = false;
 	//WASD
+	if (GetAsyncKeyState(VK_CONTROL) && m_toolInputCommands.mouse_LB_Down)
+	{
+		m_selectedObjectVector.clear();	
+		m_d3dRenderer.getCurrentSelectionVectorID().clear();
+		m_toolInputCommands.mouse_LB_Down = false;
+		
+	}
 }
+

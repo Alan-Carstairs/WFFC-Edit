@@ -7,6 +7,7 @@ BEGIN_MESSAGE_MAP(MFCMain, CWinApp)
 	ON_COMMAND(ID_FILE_SAVETERRAIN, &MFCMain::MenuFileSaveTerrain)
 	ON_COMMAND(ID_EDIT_SELECT, &MFCMain::MenuEditSelect)
 	ON_COMMAND(ID_BUTTON40001,	&MFCMain::ToolBarButton1)
+	ON_COMMAND(ID_FUNCTIONS_TERRAINSCULPTING, &MFCMain::FunctionTerrainSculpt)
 	ON_UPDATE_COMMAND_UI(ID_INDICATOR_TOOL, &CMyFrame::OnUpdatePage)
 END_MESSAGE_MAP()
 
@@ -69,12 +70,31 @@ int MFCMain::Run()
 		}
 		else
 		{	
-			int ID = m_ToolSystem.getCurrentSelectionID();
-			std::wstring statusString = L"Selected Object: " + std::to_wstring(ID);
-			m_ToolSystem.Tick(&msg);
+			/*int ID = m_ToolSystem.getCurrentSelectionID();
+			std::wstring statusString = L"Selected Object: " + std::to_wstring(ID);*/
+
+			int ID = 0;
+			std::wstring statusString = L"Selected Object: ";
+			std::wstring appendString = L", ";
+			//for (int ID : m_ToolSystem.getCurrentSelectionID()) {
+				//int ID = m_ToolSystem.getCurrentSelectionID();
+			if (m_ToolSystem.getCurrentSelectionVectorID().size() > 0) {
+				for (int ID : m_ToolSystem.getCurrentSelectionVectorID())
+					statusString += std::to_wstring(ID) + appendString;
+				m_ToolSystem.Tick(&msg);
+
+				//send current object ID to status bar in The main frame
+				m_frame->m_wndStatusBar.SetPaneText(1, statusString.c_str(), 1);
+			}
+			else
+			{
+				std::wstring statusString = L"Selected Object: " + std::to_wstring(m_ToolSystem.getCurrentSelectionVectorID().size());
+				m_ToolSystem.Tick(&msg);
 
 			//send current object ID to status bar in The main frame
 			m_frame->m_wndStatusBar.SetPaneText(1, statusString.c_str(), 1);	
+			}
+			
 		}
 	}
 
@@ -109,6 +129,10 @@ void MFCMain::ToolBarButton1()
 	m_ToolSystem.onActionSave();
 }
 
+void MFCMain::FunctionTerrainSculpt()
+{
+	m_ToolSystem.SculptFunc = !m_ToolSystem.SculptFunc;
+}
 
 MFCMain::MFCMain()
 {

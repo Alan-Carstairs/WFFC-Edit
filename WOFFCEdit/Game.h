@@ -13,6 +13,7 @@
 #include "InputCommands.h"
 #include "FPSCamera.h"
 #include <vector>
+#include "DrawUtility.h"
 
 
 // A basic game implementation that creates a D3D11 device and
@@ -52,10 +53,13 @@ public:
 	void SaveDisplayChunk(ChunkObject *SceneChunk);	//saves geometry et al
 	void ClearDisplayList();
 	void SculptTerrain();
+	void DrawUtility(ID3D11DeviceContext* context);
+	std::vector<int>& getCurrentSelectionVectorID() { return m_selectedObjectVector; }
 
 	//picking
 	int MousePicking();
-
+	void SelectTri();
+	std::vector<int> m_selectedObjectVector;
 #ifdef DXTK_AUDIO
 	void NewAudioDevice();
 #endif
@@ -66,7 +70,6 @@ private:
 
 	void CreateDeviceDependentResources();
 	void CreateWindowSizeDependentResources();
-	void SelectTri();
 	Ray CastPickingRay();
 
 	void XM_CALLCONV DrawGrid(DirectX::FXMVECTOR xAxis, DirectX::FXMVECTOR yAxis, DirectX::FXMVECTOR origin, size_t xdivs, size_t ydivs, DirectX::GXMVECTOR color);

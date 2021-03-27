@@ -28,3 +28,15 @@ public:
 	float	m_light_quadratic;
 };
 
+struct SelectedObject
+{
+	SelectedObject()
+	{
+	}
+	SelectedObject(int _id, DisplayObject* _displayObject, DirectX::BoundingOrientedBox _boundingOrientedBox) : ID(_id), object(_displayObject), boundingOrientedBox(_boundingOrientedBox)
+	{
+	}
+	int ID = -1;
+	DisplayObject* object = nullptr;
+	DirectX::BoundingOrientedBox boundingOrientedBox;
+};
