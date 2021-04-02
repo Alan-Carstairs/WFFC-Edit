@@ -31,6 +31,16 @@
 #define WIN32_LEAN_AND_MEAN
 //#include <windows.h>
 
+//////////////////////////////////////////////////////////////////////////
+// User defined custom messages
+//////////////////////////////////////////////////////////////////////////
+#define WM_SELECTION_NEW        (WM_USER + 0x0001)
+#define WM_SELECTION_ADDED      (WM_USER + 0x0002)
+#define WM_SELECTION_REMOVED    (WM_USER + 0x0003)
+#define WM_SELECTION_OVER       (WM_USER + 0x0004)
+#define WM_OBJECT_EDITED        (WM_USER + 0x0005)
+#define WM_SELECT_OBJECT_BY_ID  (WM_USER + 0x0006)
+
 #include <wrl/client.h>
 
 #include <d3d11_1.h>

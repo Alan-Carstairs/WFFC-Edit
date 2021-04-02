@@ -36,5 +36,12 @@ namespace DrawUtility
 		DirectX::FXMVECTOR pointA, DirectX::FXMVECTOR pointB, DirectX::FXMVECTOR pointC,
 		DirectX::GXMVECTOR color = DirectX::Colors::White);
 
+	void XM_CALLCONV DrawBoundingBox(DirectX::PrimitiveBatch<DirectX::VertexPositionColor>* _batch, DisplayObject* _displayObject, DirectX::FXMVECTOR _color = DirectX::Colors::White);
+
+
+	void XM_CALLCONV DrawCube2(DirectX::PrimitiveBatch<DirectX::VertexPositionColor>* batch,
+		DirectX::SimpleMath::Vector3 _position, DirectX::SimpleMath::Vector3 _rotation, DirectX::SimpleMath::Vector3 _scale, DirectX::FXMVECTOR _color);
+
+
 
 }

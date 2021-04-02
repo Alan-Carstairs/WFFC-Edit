@@ -772,6 +772,15 @@ void Game::DrawUtility(ID3D11DeviceContext * context)
 		DrawUtility::DrawTriangle(m_batch.get(), A, B, C, Colors::Red);
 	}
 
+	for (auto& elem : m_selectedObjectVector)
+	{
+		//auto& selected = elem.second;
+
+		if (m_selectedObjectVector.size() > 0)
+		{
+			DrawUtility::DrawBoundingBox(m_batch.get(),&m_displayList[elem]);
+		}
+	}
 
 	m_batch->End();
 

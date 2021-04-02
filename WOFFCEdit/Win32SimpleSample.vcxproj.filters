@@ -62,6 +62,7 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="FPSCamera.cpp" />
     <ClCompile Include="DrawUtility.cpp" />
+    <ClCompile Include="InspectorDialogue.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DeviceResources.h">
@@ -116,6 +117,7 @@
     <ClInclude Include="DrawUtility.h">
       <Filter>Tool</Filter>
     </ClInclude>
+    <ClInclude Include="InspectorDialogue.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

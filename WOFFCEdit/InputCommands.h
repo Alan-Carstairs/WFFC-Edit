@@ -12,6 +12,8 @@ struct InputCommands
 	bool rotLeft;
 	bool rotUp;
 	bool rotDown;
+	bool spawnObj;
+	bool copyObj;
 
 	//Mouse
 	int mouse_X;

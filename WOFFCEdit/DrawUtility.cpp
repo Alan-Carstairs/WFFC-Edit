@@ -172,6 +172,72 @@ namespace DrawUtility
 
 		batch->Draw(D3D_PRIMITIVE_TOPOLOGY_LINESTRIP, verts, 4);
 	}
+	void XM_CALLCONV DrawBoundingBox(PrimitiveBatch<VertexPositionColor>* _batch, DisplayObject* _displayObject, DirectX::FXMVECTOR _color)
+	{
+		for (auto& mesh : _displayObject->m_model->meshes)
+		{
+			//DrawCube2(
+			//	_batch,
+			//	_displayObject->m_position + mesh->boundingBox.Center,
+			//	_displayObject->m_orientation, // #IMPROVE: The mesh's orientation should be added to the objects orientation (complex object having meshes not at the object center)
+			//	mesh->boundingBox.Extents,
+			//	_color
+			//);
+			SimpleMath::Vector3 pos = _displayObject->m_position;
+			SimpleMath::Vector3 rot = _displayObject->m_orientation;
+			SimpleMath::Vector3 scale = _displayObject->m_scale * .5;
+			DrawCube2(_batch, pos, rot, scale, _color);
+		}
+	}
+
+
+	void XM_CALLCONV DrawCube2(PrimitiveBatch<VertexPositionColor>* batch, SimpleMath::Vector3 _position, SimpleMath::Vector3 _rotation, SimpleMath::Vector3 _scale, FXMVECTOR _color)
+	{
+		static const XMVECTORF32 s_verts[8] = {
+			{ -1.f, -1.f, -1.f, 0.f },
+			{  1.f, -1.f, -1.f, 0.f },
+			{  1.f, -1.f,  1.f, 0.f },
+			{ -1.f, -1.f,  1.f, 0.f },
+			{ -1.f,  1.f, -1.f, 0.f },
+			{  1.f,  1.f, -1.f, 0.f },
+			{  1.f,  1.f,  1.f, 0.f },
+			{ -1.f,  1.f,  1.f, 0.f }
+		};
+		static const WORD s_indices[] = {
+			0, 1,
+			1, 2,
+			2, 3,
+			3, 0,
+			4, 5,
+			5, 6,
+			6, 7,
+			7, 4,
+			0, 4,
+			1, 5,
+			2, 6,
+			3, 7
+		};
+
+		VertexPositionColor verts[8];
+
+		float pitch_X = XMConvertToRadians(_rotation.x);
+		float yaw_Y = XMConvertToRadians(_rotation.y);
+		float roll_Z = XMConvertToRadians(_rotation.z);
+
+		XMMATRIX S = XMMatrixScaling(_scale.x, _scale.y, _scale.z);
+		XMMATRIX R = XMMatrixRotationRollPitchYaw(pitch_X, yaw_Y, roll_Z);
+		XMMATRIX T = XMMatrixTranslation(_position.x, _position.y, _position.z);
+		XMMATRIX transformation = S * R * T;
+
+		for (size_t i = 0; i < 8; ++i)
+		{
+			XMVECTOR v = XMVector3Transform(s_verts[i], transformation);
+			XMStoreFloat3(&verts[i].position, v);
+			XMStoreFloat4(&verts[i].color, _color);
+		}
+
+		batch->DrawIndexed(D3D_PRIMITIVE_TOPOLOGY_LINELIST, s_indices, _countof(s_indices), verts, 8);
+	}
 
 
 

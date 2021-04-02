@@ -18,11 +18,13 @@ ToolMain::ToolMain()
 	m_toolInputCommands.back = false;
 	m_toolInputCommands.left = false;
 	m_toolInputCommands.right = false;
-
+	posOffset = 1;
 	m_toolInputCommands.mouse_X = 0;
 	m_toolInputCommands.mouse_Y = 0;
 	m_toolInputCommands.mouse_LB_Down = false;
 	SculptFunc = false;
+	m_toolInputCommands.spawnObj = false;
+	m_toolInputCommands.copyObj = false;
 
 }
 
@@ -44,7 +46,7 @@ void ToolMain::onActionInitialise(HWND handle, int width, int height)
 	//window size, handle etc for directX
 	m_width = width;
 	m_height = height;
-
+	//m_toolHandle = handle;
 	m_d3dRenderer.Initialize(handle, m_width, m_height);
 
 	//database connection establish
@@ -293,6 +295,24 @@ void ToolMain::Tick(MSG *msg)
 		//update Scenegraph
 		//add to scenegraph
 		//resend scenegraph to Direct X renderer
+	if (madeChange)
+	{
+		m_d3dRenderer.BuildDisplayList(&m_sceneGraph);
+		madeChange = false;
+	}
+	if (m_toolInputCommands.copyObj)
+	{
+		copyPaste();
+		m_toolInputCommands.copyObj = false;
+	}
+
+
+	if (m_toolInputCommands.spawnObj)
+	{
+		buildObjects();
+		m_toolInputCommands.spawnObj = false;
+	}
+
 	if (SculptFunc)
 	{
 		m_d3dRenderer.SelectTri();
@@ -300,6 +320,14 @@ void ToolMain::Tick(MSG *msg)
 		if (m_toolInputCommands.mouse_LB_Down)
 		{
 			m_d3dRenderer.SculptTerrain();
+		}
+	}
+	else {
+		if (m_toolInputCommands.mouse_LB_Down)
+		{
+			m_selectedObject = m_d3dRenderer.MousePicking();
+			m_selectedObjectVector = m_d3dRenderer.getCurrentSelectionVectorID();
+			m_toolInputCommands.mouse_LB_Down = false;
 		}
 	}
 	//Renderer Update Call
@@ -347,12 +375,7 @@ void ToolMain::UpdateInput(MSG * msg)
 
 	//here we update all the actual app functionality that we want.  This information will either be used int toolmain, or sent down to the renderer (Camera movement etc
 	//mouse
-	if (m_toolInputCommands.mouse_LB_Down)
-	{
-		m_selectedObject = m_d3dRenderer.MousePicking();
-		m_selectedObjectVector = m_d3dRenderer.getCurrentSelectionVectorID();
-		m_toolInputCommands.mouse_LB_Down = false;
-	}
+	
 
 	//WASD movement
 	if (m_keyArray['W'])
@@ -399,12 +422,71 @@ void ToolMain::UpdateInput(MSG * msg)
 	}
 	else m_toolInputCommands.rotUp = false;
 	//WASD
-	if (GetAsyncKeyState(VK_CONTROL) && m_toolInputCommands.mouse_LB_Down)
+	if (GetAsyncKeyState(VK_CONTROL))
 	{
 		m_selectedObjectVector.clear();	
 		m_d3dRenderer.getCurrentSelectionVectorID().clear();
 		m_toolInputCommands.mouse_LB_Down = false;
 		
 	}
+
+	if (m_keyArray['H'])
+	{
+		m_toolInputCommands.spawnObj = true;
+	}
+	else m_toolInputCommands.spawnObj = false;
+
+	if (m_keyArray['P'])
+	{
+		m_toolInputCommands.copyObj = true;
+	}
+	else m_toolInputCommands.copyObj = false;
+}
+
+void ToolMain::buildObjects()
+{
+	
+	//SQL
+	int rc;
+	char *sqlCommand;
+	char *ErrMSG = 0;
+	sqlite3_stmt *pResults;								//results of the query
+	sqlite3_stmt *pResultsChunk;
+
+	//OBJECTS IN THE WORLD
+	//prepare SQL Text
+	sqlCommand = "SELECT * from Objects";				//sql command which will return all records from the objects table.
+	//Send Command and fill result object
+	rc = sqlite3_prepare_v2(m_databaseConnection, sqlCommand, -1, &pResults, 0);
+
+	SceneObject newObj;
+	newObj = m_sceneGraph.back();
+	newObj.ID = m_sceneGraph.size();
+	newObj.posX = 12;
+	newObj.posY = 0;
+	newObj.posZ = -2 * posOffset;
+	posOffset++;
+	m_sceneGraph.push_back(newObj);
+	//Process REsults into renderable
+	m_d3dRenderer.BuildDisplayList(&m_sceneGraph);
+	
+
+}
+
+void ToolMain::copyPaste()
+{
+	SceneObject copiedObject;
+	if (m_selectedObjectVector.size() > 0) {
+		copiedObject = m_sceneGraph.at(m_selectedObjectVector.back());
+		if (copiedObject.ID != NULL) {
+			copiedObject.ID == m_sceneGraph.size();
+			copiedObject.posX -= 10;
+			m_sceneGraph.push_back(copiedObject);
+		}
+	}
+
+	m_d3dRenderer.BuildDisplayList(&m_sceneGraph);
+
+	m_toolInputCommands.copyObj = false;
 }
 
