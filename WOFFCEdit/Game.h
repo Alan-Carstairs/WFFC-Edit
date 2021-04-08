@@ -64,6 +64,7 @@ public:
 	void NewAudioDevice();
 #endif
 
+	FPSCamera*				GetCamera() { return m_Camera; }
 private:
 
 	void Update(DX::StepTimer const& timer);
@@ -89,7 +90,6 @@ private:
 	int mouse_X;
 	int mouse_Y;
 	bool mouse_LB_Down;
-
 	////camera
 	//DirectX::SimpleMath::Vector3		m_camPosition;
 	//DirectX::SimpleMath::Vector3		m_camOrientation;

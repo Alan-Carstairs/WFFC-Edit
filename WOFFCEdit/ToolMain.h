@@ -41,7 +41,7 @@ public:	//variables
 private:	//methods
 	void	onContentAdded();
 
-
+	FPSCamera *fps;
 
 private:	//variables
 	HWND	m_toolHandle;		//Handle to the  window
@@ -50,6 +50,7 @@ private:	//variables
 	CRect	WindowRECT;		//Window area rectangle. 
 	char	m_keyArray[256];
 	sqlite3 *m_databaseConnection;	//sqldatabase handle
+	
 
 	int m_width;		//dimensions passed to directX
 	int m_height;

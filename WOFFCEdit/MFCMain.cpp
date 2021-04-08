@@ -114,7 +114,6 @@ int MFCMain::Run()
 	//		}
 	//		TranslateMessage(&msg);
 	//		DispatchMessage(&msg);
-
 	//		m_ToolSystem.UpdateInput(&msg);
 	//	}
 	MSG msg;

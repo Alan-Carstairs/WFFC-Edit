@@ -1,4 +1,23 @@
 ﻿C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(391,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (Win32SimpleSample.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+  DisplayChunk.cpp
+c:\users\fire2\documents\github\wffc-edit\woffcedit\displaychunk.cpp(14): warning C4305: '=': truncation from 'double' to 'float'
+c:\users\fire2\documents\github\wffc-edit\woffcedit\displaychunk.cpp(15): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\fire2\documents\github\wffc-edit\woffcedit\displaychunk.cpp(74): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\fire2\documents\github\wffc-edit\woffcedit\displaychunk.cpp(113): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.18362.0\ucrt\stdio.h(208): note: see declaration of 'fopen'
+c:\users\fire2\documents\github\wffc-edit\woffcedit\displaychunk.cpp(186): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.18362.0\ucrt\stdio.h(208): note: see declaration of 'fopen'
+c:\users\fire2\documents\github\wffc-edit\woffcedit\displaychunk.cpp(281): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+c:\users\fire2\documents\github\wffc-edit\woffcedit\displaychunk.cpp(282): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+c:\users\fire2\documents\github\wffc-edit\woffcedit\displaychunk.cpp(283): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+c:\users\fire2\documents\github\wffc-edit\woffcedit\displaychunk.cpp(284): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+c:\users\fire2\documents\github\wffc-edit\woffcedit\displaychunk.cpp(291): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+c:\users\fire2\documents\github\wffc-edit\woffcedit\displaychunk.cpp(292): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+c:\users\fire2\documents\github\wffc-edit\woffcedit\displaychunk.cpp(297): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\fire2\documents\github\wffc-edit\woffcedit\displaychunk.cpp(319): warning C4101: 'index4': unreferenced local variable
+c:\users\fire2\documents\github\wffc-edit\woffcedit\displaychunk.cpp(319): warning C4101: 'index2': unreferenced local variable
+c:\users\fire2\documents\github\wffc-edit\woffcedit\displaychunk.cpp(319): warning C4101: 'index3': unreferenced local variable
+c:\users\fire2\documents\github\wffc-edit\woffcedit\displaychunk.cpp(319): warning C4101: 'index1': unreferenced local variable
   Game.cpp
 c:\users\fire2\documents\github\wffc-edit\woffcedit\game.cpp(30): warning C4305: '=': truncation from 'double' to 'float'
 c:\users\fire2\documents\github\wffc-edit\woffcedit\game.cpp(211): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
@@ -20,4 +39,43 @@ c:\users\fire2\documents\github\wffc-edit\woffcedit\game.cpp(694): warning C4244
 c:\users\fire2\documents\github\wffc-edit\woffcedit\game.cpp(695): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
 c:\users\fire2\documents\github\wffc-edit\woffcedit\game.cpp(698): warning C4244: 'argument': conversion from 'LONG' to 'float', possible loss of data
 c:\users\fire2\documents\github\wffc-edit\woffcedit\game.cpp(700): warning C4244: 'argument': conversion from 'LONG' to 'float', possible loss of data
+  Main.cpp
+  _WIN32_WINNT not defined. Defaulting to _WIN32_WINNT_MAXVER (see WinSDKVer.h)
+  MFCFrame.cpp
+  _WIN32_WINNT not defined. Defaulting to _WIN32_WINNT_MAXVER (see WinSDKVer.h)
+  MFCMain.cpp
+  _WIN32_WINNT not defined. Defaulting to _WIN32_WINNT_MAXVER (see WinSDKVer.h)
+  ToolMain.cpp
+  _WIN32_WINNT not defined. Defaulting to _WIN32_WINNT_MAXVER (see WinSDKVer.h)
+c:\users\fire2\documents\github\wffc-edit\woffcedit\toolmain.cpp(98): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\fire2\documents\github\wffc-edit\woffcedit\toolmain.cpp(99): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\fire2\documents\github\wffc-edit\woffcedit\toolmain.cpp(100): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\fire2\documents\github\wffc-edit\woffcedit\toolmain.cpp(101): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\fire2\documents\github\wffc-edit\woffcedit\toolmain.cpp(102): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\fire2\documents\github\wffc-edit\woffcedit\toolmain.cpp(103): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\fire2\documents\github\wffc-edit\woffcedit\toolmain.cpp(104): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\fire2\documents\github\wffc-edit\woffcedit\toolmain.cpp(105): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\fire2\documents\github\wffc-edit\woffcedit\toolmain.cpp(106): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\fire2\documents\github\wffc-edit\woffcedit\toolmain.cpp(118): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\fire2\documents\github\wffc-edit\woffcedit\toolmain.cpp(119): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\fire2\documents\github\wffc-edit\woffcedit\toolmain.cpp(120): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\fire2\documents\github\wffc-edit\woffcedit\toolmain.cpp(124): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\fire2\documents\github\wffc-edit\woffcedit\toolmain.cpp(125): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\fire2\documents\github\wffc-edit\woffcedit\toolmain.cpp(126): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\fire2\documents\github\wffc-edit\woffcedit\toolmain.cpp(130): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+c:\users\fire2\documents\github\wffc-edit\woffcedit\toolmain.cpp(131): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+c:\users\fire2\documents\github\wffc-edit\woffcedit\toolmain.cpp(141): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\fire2\documents\github\wffc-edit\woffcedit\toolmain.cpp(142): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\fire2\documents\github\wffc-edit\woffcedit\toolmain.cpp(143): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\fire2\documents\github\wffc-edit\woffcedit\toolmain.cpp(144): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\fire2\documents\github\wffc-edit\woffcedit\toolmain.cpp(145): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\fire2\documents\github\wffc-edit\woffcedit\toolmain.cpp(146): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\fire2\documents\github\wffc-edit\woffcedit\toolmain.cpp(147): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\fire2\documents\github\wffc-edit\woffcedit\toolmain.cpp(148): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\fire2\documents\github\wffc-edit\woffcedit\toolmain.cpp(149): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\fire2\documents\github\wffc-edit\woffcedit\toolmain.cpp(150): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\fire2\documents\github\wffc-edit\woffcedit\toolmain.cpp(474): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\fire2\documents\github\wffc-edit\woffcedit\toolmain.cpp(461): warning C4101: 'pResultsChunk': unreferenced local variable
+c:\users\fire2\documents\github\wffc-edit\woffcedit\toolmain.cpp(489): warning C4553: '==': result of expression not used; did you intend '='?
+  Generating Code...
   Win32SimpleSample.vcxproj -> C:\Users\fire2\Documents\GitHub\WFFC-Edit\WOFFCEdit\Debug\WoFEdit.exe

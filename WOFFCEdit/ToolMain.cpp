@@ -429,6 +429,13 @@ void ToolMain::UpdateInput(MSG * msg)
 		m_toolInputCommands.mouse_LB_Down = false;
 		
 	}
+	if (m_keyArray['F'])
+	{
+		if (m_selectedObjectVector.size() > 0) {
+			m_d3dRenderer.GetCamera()->TryFocus(m_sceneGraph[m_selectedObjectVector.back()]);
+		}
+		
+	}
 
 	if (m_keyArray['H'])
 	{
